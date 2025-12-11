@@ -1,136 +1,44 @@
-🧠 Mental Health Prediction and Chatbot
+🧠 Mental Health Prediction & Chatbot
 
-A Flask-based web application that predicts mental health scores using Multiple Linear Regression and provides a fully-featured pattern-based mental health chatbot built from scratch in Python.
+A Flask-based web application that predicts mental health scores using Multiple Linear Regression and includes a smart rule-based mental health chatbot built entirely in Python.
 
 📌 Overview
 
-This project combines a machine-learning mental health predictor with a smart support-oriented chatbot capable of understanding a wide range of mental-health-related patterns.
-Users can predict their mental-health score and chat with an AI assistant to receive guidance, coping strategies, and emotional support.
+This project blends Machine Learning with a pattern-matching mental health chatbot to help users understand their mental wellbeing and receive supportive guidance.
+
+Users can:
+
+Predict their mental health score
+
+Chat with a supportive assistant
+
+Learn coping strategies & mindfulness practices
+
+Receive helpful emotional wellbeing insights
 
 🚀 Features
 🔍 1. Mental Health Prediction (Machine Learning)
 
-Algorithm: Multiple Linear Regression
+Model: Multiple Linear Regression
 
-Model Performance:
+Performance Metrics:
 
 MSE: 29.91
 
 R² Score: 0.91
 
-Predicts a mental health score based on multiple input parameters
+Predicts a mental-health index based on user inputs
 
-High accuracy for linear regression
+High accuracy for a linear model
 
 💬 2. Smart Rule-Based Mental Health Chatbot
 
-A highly structured chatbot using:
+This chatbot is built using regex-based intent detection, not simple if-else.
+It contains a large library of categorized responses and offers supportive, long-form mental health guidance.
 
-Regex-based intent detection
+The chatbot can understand and respond to:
 
-Large categorized response system
-
-Context-aware messaging
-
-Emergency keyword detection (highest priority)
-
-Emotionally supportive long-form responses
-
-It can understand and respond to:
-
-✔ Depression
-✔ Anxiety & panic
-✔ Stress & burnout
-✔ Loneliness
-✔ Relationship issues
-✔ Sleep issues
-✔ Coping strategies
-✔ Mindfulness
-✔ Self-care
-✔ Gratitude & positivity
-✔ Therapy & medication
-✔ Crisis support
-✔ Greetings, farewells, thanks
-✔ Off-topic input
-
-🛠 3. Built With Flask (Backend)
-
-Flask manages:
-
-User input for ML prediction
-
-Chatbot communication
-
-Page routing
-
-Template rendering
-
-🔧 4. Actively Being Upgraded & Improved
-
-This project is not static — it is actively being enhanced.
-Planned upgrades include:
-
-Adding more ML models
-
-Improving UI/UX
-
-Expanding chatbot knowledge
-
-Integrating smarter natural language processing
-
-Adding additional mental health categories
-
-Making the chatbot more personalized
-
-
-🧠 Chatbot Logic (mental_health_chatbot.py)
-
-The chatbot uses:
-
-class MentalHealthChatbot:
-    def __init__(self):
-        self.user_context = {}
-        self.responses = self._initialize_responses()
-        self.patterns = self._initialize_patterns()
-
-
-It uses:
-
-regex for intent detection
-
-A large library of categorized mental-health responses
-
-Context tracking
-
-Emergency priority checks
-
-Helpful fallback responses
-
-⚙️ Installation & Setup
-1️⃣ Clone the repository
-git clone https://github.com/atharvp25/mental-health-prediction-and-chatbot.git
-cd mental-health-prediction-and-chatbot
-
-2️⃣ Install dependencies
-pip install -r requirements.txt
-
-3️⃣ Run the Flask application
-python app.py
-
-
-Visit:
-
-http://127.0.0.1:5000/
-
-📈 Machine Learning Model Details
-Metric	Value
-MSE	29.91
-R² Score	0.91
-
-The model explains 91% of the variance, showing strong predictive performance.
-
-💡 What the Chatbot Can Assist With
-Mental Health Topics
+🧠 Mental Health Topics
 
 Depression
 
@@ -142,34 +50,107 @@ Burnout
 
 Loneliness
 
+Sleep issues
+
 Relationship issues
 
-Sleep challenges
-
-Wellbeing & Daily Coping
+🌿 Wellbeing & Coping
 
 Mindfulness
 
-Self-care routines
+Self-care
+
+Gratitude
+
+Grounding techniques
 
 Positive thinking
 
-Gratitude exercises
+📘 Support & Guidance
 
-Deep-breathing & grounding techniques
+Therapy information
 
-Guidance & Support
+Medication basics
 
-Therapy options
+Crisis helplines
 
-Medication information
+General emotional support
 
-Helplines & crisis support
+⚠️ Special Handling
 
-🤝 Contributing
+Emergency keyword detection (highest priority)
 
-Contributions, suggestions, and improvements are welcome.
+User context tracking
+
+Off-topic detection
+
+Clean fallback responses
+
+🌐 3. Flask Backend
+
+Flask handles:
+
+User input for ML prediction
+
+Chatbot message routing
+
+Page rendering
+
+Smooth connection between chatbot and UI
+
+🔧 4. Ongoing Improvements
+
+This project is actively being improved. Planned upgrades include:
+
+Better UI/UX
+
+Additional ML models
+
+A more advanced NLP-based chatbot
+
+More mental-health categories
+
+Personalized suggestions
+
+🧠 Chatbot Logic (Brief Overview)
+class MentalHealthChatbot:
+    def __init__(self):
+        self.user_context = {}
+        self.responses = self._initialize_responses()
+        self.patterns = self._initialize_patterns()
+
+
+✔ Uses regex for detecting intent
+✔ Has detailed mental health explanations
+✔ Supports contextual replies
+✔ Prioritizes emergency messages
+
+⚙️ Installation & Usage
+1️⃣ Clone the Repository
+git clone https://github.com/atharvp25/mental-health-prediction-and-chatbot.git
+cd mental-health-prediction-and-chatbot
+
+2️⃣ Install Requirements
+pip install -r requirements.txt
+
+3️⃣ Run the Flask App
+python app.py
+
+
+Visit the app at:
+👉 http://127.0.0.1:5000/
+
+📈 Machine Learning Model Details
+Metric	Value
+MSE	29.91
+R² Score	0.91
+
+A strong score indicating that the model explains 91% of dataset variance.
+
+🤝 Contribution
+
+Feel free to fork the project, open issues, or submit pull requests.
 
 📜 License
 
-This project is open-source. Feel free to modify and use it.
+This project is open-source. You’re free to use and modify it.
