@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Mental Health Prediction{% endblock %}
+
+{% block content %}
+<div class="row align-items-center min-vh-50">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-primary mb-4">
+            Your Mental Health Matters
+        </h1>
+        <p class="lead mb-4">
+            Take control of your mental wellbeing with our AI-powered prediction system. 
+            Get insights about your mental health and access supportive resources.
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {% if session.user_id %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <i class="fas fa-user-plus me-2"></i>Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 text-center">
+        <div class="hero-image">
+            <i class="fas fa-heartbeat text-primary" style="font-size: 300px; opacity: 0.1;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5 pt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-robot text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">AI Prediction</h5>
+                <p class="card-text">Get accurate mental health predictions using our machine learning model based on your lifestyle factors.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-comments text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">Smart Chatbot</h5>
+                <p class="card-text">Talk to our empathetic AI assistant for immediate mental health support and coping strategies.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">Progress Tracking</h5>
+                <p class="card-text">Monitor your mental health journey with detailed history and progress reports.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Section -->
+<div class="alert alert-warning mt-5" role="alert">
+    <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Emergency Support</h4>
+    <p class="mb-0">If you're in crisis or having thoughts of harming yourself, please reach out immediately to professional help:</p>
+    <hr>
+    <p class="mb-0">
+        <strong>Emergency:</strong> Call 911 | 
+        <strong>Crisis Line:</strong> 988 | 
+        <strong>Text Line:</strong> Text HOME to 741741
+    </p>
+</div>
+{% endblock %}

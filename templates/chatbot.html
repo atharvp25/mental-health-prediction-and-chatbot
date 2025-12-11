@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}Mental Health Chatbot - MindCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Chatbot Header -->
+        <div class="card glass-card mb-4 animate-fade-in-up">
+            <div class="card-body text-center">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        <div class="chatbot-avatar animate-pulse">
+                            <i class="fas fa-robot text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h3 class="text-primary mb-2">MindCare Assistant</h3>
+                        <p class="text-muted mb-0">I'm here to support your mental health journey. How can I help you today?</p>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="status-indicator">
+                            <span class="badge bg-success">
+                                <i class="fas fa-circle me-1"></i>Online
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="card glass-card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Chat with Assistant</h5>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div class="card-body p-0">
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Welcome Message -->
+                    <div class="message bot-message animate-slide-left">
+                        <div class="d-flex align-items-start">
+                            <div class="chat-avatar me-3">
+                                <i class="fas fa-robot text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>MindCare Assistant</strong>
+                                <p class="mb-1">Hello {{ session.name }}! 👋 I'm your mental health assistant.</p>
+                                <p class="mb-0">You can talk to me about stress, anxiety, depression, or anything else on your mind. I'm here to listen and provide support.</p>
+                                <small class="text-muted">Just now</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="message bot-message animate-slide-right" style="animation-delay: 0.3s;">
+                        <div class="d-flex align-items-start">
+                            <div class="chat-avatar me-3">
+                                <i class="fas fa-robot text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>MindCare Assistant</strong>
+                                <p class="mb-2">Here are some things we can talk about:</p>
+                                <div class="quick-suggestions">
+                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickSuggestion('I\'m feeling stressed')">
+                                        😥 I'm feeling stressed
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickSuggestion('I need coping strategies')">
+                                        🛠️ Coping strategies
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickSuggestion('Tell me about mindfulness')">
+                                        🧘 Mindfulness
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickSuggestion('I can\'t sleep well')">
+                                        😴 Sleep issues
+                                    </button>
+                                </div>
+                                <small class="text-muted">Just now</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input">
+                    <div class="input-group">
+                        <input type="text" 
+                               id="chat-input" 
+                               class="form-control" 
+                               placeholder="Type your message here..." 
+                               aria-label="Type your message"
+                               onkeypress="handleKeyPress(event)">
+                        <button class="btn btn-primary" type="button" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your conversations are private and secure
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Resources -->
+        <div class="card glass-card mt-4 animate-fade-in-up">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0 text-dark">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Immediate Support Resources
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-3">
+                        <div class="resource-card">
+                            <i class="fas fa-phone-alt text-danger fa-2x mb-2"></i>
+                            <h6>988 Suicide & Crisis Lifeline</h6>
+                            <p class="small text-muted">Call or text 988 anytime</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="resource-card">
+                            <i class="fas fa-sms text-info fa-2x mb-2"></i>
+                            <h6>Crisis Text Line</h6>
+                            <p class="small text-muted">Text HOME to 741741</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="resource-card">
+                            <i class="fas fa-ambulance text-danger fa-2x mb-2"></i>
+                            <h6>Emergency Services</h6>
+                            <p class="small text-muted">Call 911 immediately</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Note:</strong> This chatbot provides supportive listening and coping strategies, but is not a substitute for professional medical advice or emergency services.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Quick suggestion buttons
+function quickSuggestion(text) {
+    document.getElementById('chat-input').value = text;
+    sendMessage();
+}
+
+// Handle Enter key press
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// Enhanced sendMessage function
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessageToChat(message, 'user');
+    input.value = '';
+    
+    // Show loading indicator
+    const loadingId = addLoadingMessage();
+    
+    // Send to backend
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove loading message
+        removeLoadingMessage(loadingId);
+        
+        // Add bot response
+        if (data.response) {
+            addMessageToChat(data.response, 'bot');
+        }
+    })
+    .catch(error => {
+        removeLoadingMessage(loadingId);
+        addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
+    });
+}
+
+function addMessageToChat(message, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="d-flex align-items-start justify-content-end">
+                <div class="text-end">
+                    <strong>You</strong>
+                    <p class="mb-1">${message}</p>
+                    <small class="text-muted">${timestamp}</small>
+                </div>
+                <div class="chat-avatar ms-3">
+                    <i class="fas fa-user text-success"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="d-flex align-items-start">
+                <div class="chat-avatar me-3">
+                    <i class="fas fa-robot text-primary"></i>
+                </div>
+                <div>
+                    <strong>MindCare Assistant</strong>
+                    <p class="mb-1">${message}</p>
+                    <small class="text-muted">${timestamp}</small>
+                </div>
+            </div>
+        `;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Add animation
+    messageDiv.style.animation = 'fadeInUp 0.3s ease';
+}
+
+function addLoadingMessage() {
+    const chatMessages = document.getElementById('chat-messages');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-message';
+    loadingDiv.className = 'message bot-message';
+    loadingDiv.innerHTML = `
+        <div class="d-flex align-items-start">
+            <div class="chat-avatar me-3">
+                <i class="fas fa-robot text-primary"></i>
+            </div>
+            <div>
+                <strong>MindCare Assistant</strong>
+                <p class="mb-1"><div class="loading-spinner"></div> Thinking...</p>
+                <small class="text-muted">Just now</small>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return 'loading-message';
+}
+
+function removeLoadingMessage(id) {
+    const loadingMessage = document.getElementById(id);
+    if (loadingMessage) {
+        loadingMessage.remove();
+    }
+}
+
+// Add custom styles for chatbot
+const chatbotStyle = document.createElement('style');
+chatbotStyle.textContent = `
+    .chat-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(67, 97, 238, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .quick-suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .resource-card {
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .resource-card:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .chatbot-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(67, 97, 238, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .status-indicator .badge {
+        animation: pulse 2s infinite;
+    }
+`;
+document.head.appendChild(chatbotStyle);
+</script>
+{% endblock %}

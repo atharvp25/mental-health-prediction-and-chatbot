@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History - MindCare{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-history me-2"></i>Prediction History</h2>
+            <div>
+                <a href="{{ url_for('predict') }}" class="btn btn-primary me-2">
+                    <i class="fas fa-plus me-2"></i>New Prediction
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        {% if predictions %}
+        <!-- Statistics Summary -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stat-card text-center animate-fade-in-up">
+                    <i class="fas fa-chart-bar text-primary"></i>
+                    <h4 class="text-primary">{{ predictions|length }}</h4>
+                    <p class="text-muted">Total Predictions</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <i class="fas fa-arrow-up text-success"></i>
+                    <h4 class="text-success">{{ "%.1f"|format(predictions|map(attribute='mental_health_score')|max) }}</h4>
+                    <p class="text-muted">Highest Score</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <i class="fas fa-arrow-down text-warning"></i>
+                    <h4 class="text-warning">{{ "%.1f"|format(predictions|map(attribute='mental_health_score')|min) }}</h4>
+                    <p class="text-muted">Lowest Score</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <i class="fas fa-calculator text-info"></i>
+                    <h4 class="text-info">{{ "%.1f"|format(predictions|map(attribute='mental_health_score')|sum / predictions|length) }}</h4>
+                    <p class="text-muted">Average Score</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="card glass-card animate-slide-up">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-table me-2"></i>All Predictions</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Mental Health Score</th>
+                                <th>Age</th>
+                                <th>Sleep Hours</th>
+                                <th>Physical Activity</th>
+                                <th>Work Hours</th>
+                                <th>Screen Time</th>
+                                <th>Smoking</th>
+                                <th>Alcohol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prediction in predictions %}
+                            <tr class="animate-fade-in" style="animation-delay: {{ loop.index * 0.1 }}s;">
+                                <td>
+                                    <small class="text-muted">{{ prediction.created_at.strftime('%Y-%m-%d') }}</small><br>
+                                    <small class="text-muted">{{ prediction.created_at.strftime('%H:%M') }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge score-badge bg-{{ 
+                                        'success' if prediction.mental_health_score >= 70 
+                                        else 'warning' if prediction.mental_health_score >= 50 
+                                        else 'danger' 
+                                    }}">
+                                        {{ "%.1f"|format(prediction.mental_health_score) }}
+                                    </span>
+                                </td>
+                                <td>{{ prediction.age }}</td>
+                                <td>{{ prediction.sleep_hours }}h</td>
+                                <td>{{ prediction.physical_activity }}min</td>
+                                <td>{{ prediction.work_hours }}h</td>
+                                <td>{{ prediction.screen_time }}h</td>
+                                <td><span class="badge bg-secondary">{{ prediction.smoking_label }}</span></td>
+                                <td><span class="badge bg-info">{{ prediction.alcohol_label }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Chart Visualization -->
+        <div class="card glass-card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Progress Over Time</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress-chart">
+                    {% for prediction in predictions|reverse %}
+                    <div class="chart-bar-container mb-2">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small>{{ prediction.created_at.strftime('%m/%d') }}</small>
+                            <small>{{ "%.1f"|format(prediction.mental_health_score) }}</small>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar progress-bar-striped" 
+                                 role="progressbar" 
+                                 style="width: {{ prediction.mental_health_score }}%; 
+                                        background: linear-gradient(90deg, 
+                                            {% if prediction.mental_health_score >= 70 %}#28a745
+                                            {% elif prediction.mental_health_score >= 50 %}#ffc107
+                                            {% else %}#dc3545{% endif %}, 
+                                            {% if prediction.mental_health_score >= 70 %}#20c997
+                                            {% elif prediction.mental_health_score >= 50 %}#fd7e14
+                                            {% else %}#e83e8c{% endif %})"
+                                 aria-valuenow="{{ prediction.mental_health_score }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="card glass-card text-center py-5 animate-pulse">
+            <div class="card-body">
+                <i class="fas fa-chart-bar text-muted mb-3" style="font-size: 4rem;"></i>
+                <h3 class="text-muted">No Predictions Yet</h3>
+                <p class="text-muted mb-4">You haven't made any mental health predictions yet.</p>
+                <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Make Your First Prediction
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Add fade-in animation for table rows
+document.addEventListener('DOMContentLoaded', function() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .animate-slide-up {
+            animation: slide-up 0.6s ease;
+        }
+        
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
+{% endblock %}
